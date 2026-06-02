@@ -691,7 +691,7 @@ function Stats() {
             <div
               key={i}
               className={[
-                'py-10 lg:py-14 px-6 lg:px-8 flex flex-col items-start',
+                'py-10 lg:py-14 px-4 sm:px-6 lg:px-8 flex flex-col items-start min-w-0',
                 i === 1 || i === 3 ? 'border-l border-stone-200' : '',
                 i >= 2 ? 'border-t sm:border-t-0 border-stone-200' : '',
                 i > 0 ? 'sm:border-l border-stone-200' : '',
@@ -699,7 +699,7 @@ function Stats() {
             >
               <div
                 className="font-serif-display font-semibold text-emerald-700 num-tabular
-                           text-[1.625rem] sm:text-[2rem] lg:text-[2.5rem]
+                           text-[1.375rem] sm:text-[2rem] lg:text-[2.5rem]
                            leading-[1] tracking-[-0.02em] min-h-[1.35em] flex items-center"
                 style={{ fontVariationSettings: '"opsz" 120, "SOFT" 25' }}
               >
@@ -709,7 +709,7 @@ function Stats() {
                     : [<span key={`p${idx}`}>{part}</span>]
                 )}
               </div>
-              <div className="mt-1.5 font-mono-label text-[12px] sm:text-[13px] lg:text-[14px] text-stone-500 whitespace-nowrap">
+              <div className="mt-1.5 font-mono-label text-[10.5px] sm:text-[13px] lg:text-[14px] text-stone-500 leading-[1.35] sm:whitespace-nowrap">
                 {t(s.l.en, s.l.hi)}
               </div>
             </div>
@@ -722,21 +722,16 @@ function Stats() {
 
 /* ─────────────────────────── 03b CLIENTELE ─────────────────────────── */
 
-const CLIENTS = [
-  'Tata Motors',
-  'Mahindra',
-  'Ashok Leyland',
-  'BharatBenz',
-  'Eicher',
-  'VECV',
-  'Force Motors',
-  'SML Isuzu',
-  'Delhivery',
-  'BlackBuck',
-  'Rivigo',
-  'Porter',
+const CLIENTS: { src: string; alt: string }[] = [
+  { src: '/client-samrx.png', alt: 'SAMRX — Safety First' },
+  { src: '/client-eco-mobility.png', alt: 'ECO Mobility' },
+  { src: '/client-supreme.png', alt: 'Supreme' },
+  { src: '/client-greenline.png', alt: 'GreenLine — Decarbonising heavy trucking' },
+  { src: '/client-bluwheelz.png', alt: 'Bluwheelz — Electrifying Logistics' },
+  { src: '/client-amc.png', alt: 'AMC — Automobile Carriers' },
+  { src: '/client-blr.png', alt: 'BLR Logistiks (I) Ltd' },
 ]
-const CLIENTS_LOOP = [...CLIENTS, ...CLIENTS]
+const CLIENTS_LOOP = [...CLIENTS, ...CLIENTS, ...CLIENTS]
 
 function Clientele() {
   const t = useT()
@@ -747,7 +742,7 @@ function Clientele() {
           {t('Trusted by fleets & logistics teams across India', 'भारत भर के फ्लीट और लॉजिस्टिक्स दलों का भरोसा')}
         </p>
         <div
-          className="relative mt-8 overflow-hidden"
+          className="relative mt-14 lg:mt-16 overflow-hidden"
           style={{
             maskImage:
               'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
@@ -755,15 +750,20 @@ function Clientele() {
               'linear-gradient(to right, transparent, black 8%, black 92%, transparent)',
           }}
         >
-          <div className="flex w-max animate-marquee gap-12 lg:gap-16 pr-12 lg:pr-16">
-            {CLIENTS_LOOP.map((name, i) => (
-              <span
+          <div
+            className="flex w-max items-center animate-marquee gap-12 lg:gap-20 pr-12 lg:pr-20"
+            style={{ animationDuration: '60s' }}
+          >
+            {CLIENTS_LOOP.map((c, i) => (
+              <img
                 key={i}
-                className="shrink-0 font-serif-display text-[1.5rem] sm:text-[1.75rem] lg:text-[2rem] font-medium text-stone-400 hover:text-stone-700 transition-colors tracking-tight whitespace-nowrap"
-                style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
-              >
-                {name}
-              </span>
+                src={c.src}
+                alt={c.alt}
+                loading="lazy"
+                decoding="async"
+                draggable={false}
+                className="shrink-0 h-7 sm:h-8 lg:h-9 w-auto object-contain select-none grayscale opacity-70 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+              />
             ))}
           </div>
         </div>
@@ -799,7 +799,7 @@ const ROAD_REALITY_CARDS: LocalizedCard[] = [
 function RoadReality() {
   const t = useT()
   return (
-    <section className="relative bg-[var(--color-cream-deep)] py-20 lg:py-28 overflow-hidden">
+    <section className="relative bg-[var(--color-cream-deep)] py-12 lg:py-28 overflow-hidden">
       {/* warning-territory dot pattern — subtle, hazard-tone */}
       <div className="absolute inset-0 bg-hazard-dots opacity-50 pointer-events-none" />
 
@@ -852,7 +852,7 @@ function WhatYouGet() {
   const t = useT()
   const openModal = useOpenDashboardModal()
   return (
-    <section id="features" className="bg-[var(--color-cream)] py-24 lg:py-32">
+    <section id="features" className="bg-[var(--color-cream)] py-14 lg:py-32">
       <div className="mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
         <div className="max-w-[820px] mx-auto text-center">
           <SectionKicker label="What you get" />
@@ -863,7 +863,7 @@ function WhatYouGet() {
 
         <div className="mt-16 lg:mt-20 grid grid-cols-1 lg:grid-cols-12 gap-5">
           {/* Big "Included" feature card — ink dark for emphasis */}
-          <article className="lg:col-span-6 relative overflow-hidden rounded-[24px] bg-white text-stone-900 border border-stone-200 min-h-[400px] sm:min-h-[420px] transition-all duration-300 hover:-translate-y-0.5">
+          <article className="lg:col-span-6 relative overflow-hidden rounded-[24px] bg-white text-stone-900 border border-stone-200 min-h-[300px] sm:min-h-[420px] transition-all duration-300 hover:-translate-y-0.5">
             {/* soft emerald halo */}
             <div className="pointer-events-none absolute -left-24 -top-24 w-[420px] h-[420px] rounded-full bg-emerald-500/15 blur-3xl" />
             <img
@@ -890,7 +890,7 @@ function WhatYouGet() {
                 </span>
                 <span className="font-mono-label text-[10.5px] text-emerald-600">{t('Included', 'शामिल')}</span>
               </div>
-              <h3 className="mt-6 font-serif-display text-[2rem] sm:text-[2.5rem] lg:text-[3rem] font-medium leading-[1.02] tracking-[-0.02em] text-stone-900">
+              <h3 className="mt-6 font-serif-display text-[1.625rem] sm:text-[2rem] lg:text-[2.375rem] font-medium leading-[1.02] tracking-[-0.02em] text-stone-900">
                 {t('24×7 On-Call Legal Support', '24×7 ऑन-कॉल कानूनी सहायता')}
               </h3>
               <p className="mt-6 text-[14px] sm:text-[15px] leading-[1.65] text-stone-600 max-w-[360px]">
@@ -999,7 +999,7 @@ function HowItWorks() {
   }, [])
 
   return (
-    <section className="bg-white py-20 lg:py-28 border-y border-stone-200/60">
+    <section className="bg-white py-12 lg:py-28 border-y border-stone-200/60">
       <div className="mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
         <div className="text-center max-w-[1100px] mx-auto">
           <SectionKicker label="How it works" />
@@ -1030,11 +1030,11 @@ function HowItWorks() {
                   className="snap-start shrink-0 w-[82vw] max-w-[320px]"
                 >
                   <article className="relative h-full rounded-2xl bg-white ring-1 ring-stone-200 shadow-[0_18px_40px_-22px_rgba(0,0,0,0.18)] p-5 flex flex-col">
-                    <header className="flex items-center gap-3">
-                      <span className="shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-500 text-white text-[11px] font-bold font-mono">
+                    <header className="flex items-center gap-2.5">
+                      <span className="shrink-0 inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-500 text-white text-[10px] font-bold font-mono">
                         0{i + 1}
                       </span>
-                      <h3 className="text-[15px] font-bold leading-tight tracking-tight text-stone-900">
+                      <h3 className="text-[17px] font-bold leading-tight tracking-tight text-stone-900">
                         {t(step.title.en, step.title.hi)}
                       </h3>
                     </header>
@@ -1198,7 +1198,7 @@ function DashboardPreview() {
   const openModal = useOpenDashboardModal()
   const t = useT()
   return (
-    <section className="relative bg-[var(--color-ink)] text-white py-24 lg:py-32 overflow-hidden">
+    <section className="relative bg-[var(--color-ink)] text-white py-14 lg:py-32 overflow-hidden">
       {/* atmospheric depth */}
       <div
         aria-hidden="true"
@@ -1367,7 +1367,7 @@ function Pricing() {
   const openModal = useOpenDashboardModal()
   const t = useT()
   return (
-    <section id="pricing" className="relative bg-[var(--color-cream)] py-24 lg:py-32 overflow-hidden">
+    <section id="pricing" className="relative bg-[var(--color-cream)] py-14 lg:py-32 overflow-hidden">
       <div className="mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
         <div className="text-center">
           <SectionKicker label="Pricing" />
@@ -1507,7 +1507,7 @@ function UseCases() {
   const t = useT()
   const openModal = useOpenDashboardModal()
   return (
-    <section className="relative bg-white py-24 lg:py-32 overflow-hidden">
+    <section className="relative bg-white py-14 lg:py-32 overflow-hidden">
       {/* faint hairline grid — operational dispatch feel */}
       <div
         aria-hidden="true"
@@ -1625,7 +1625,7 @@ const MINI_TESTIS_LOOP = [...MINI_TESTIS, ...MINI_TESTIS]
 function Testimonials() {
   const t = useT()
   return (
-    <section className="bg-[var(--color-cream)] py-24 lg:py-32">
+    <section className="bg-[var(--color-cream)] py-14 lg:py-32">
       <div className="mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
         <div className="text-center">
           <SectionKicker label="Voices from the road" />
@@ -1691,16 +1691,32 @@ function Testimonials() {
 
 const FAQ_ITEMS: { q: { en: string; hi: string }; a: { en: string; hi: string } }[] = [
   {
-    q: { en: 'What is UDrive by LOTS247?', hi: 'LOTS247 का UDrive क्या है?' },
-    a: { en: 'UDrive is a self-serve legal and challan support plan for commercial vehicle owners.', hi: 'UDrive कमर्शियल वाहन मालिकों के लिए एक सेल्फ-सर्व कानूनी और चालान सहायता प्लान है।' },
+    q: { en: 'What is LOTS247?', hi: 'LOTS247 क्या है?' },
+    a: {
+      en: 'LOTS247 (Lawyer on the Spot) is a legal assistance platform that helps vehicle owners manage challans, legal notices, accident-related support, and compliance requirements through a technology-driven network of legal experts.',
+      hi: 'LOTS247 (Lawyer on the Spot) एक कानूनी सहायता प्लेटफ़ॉर्म है जो वाहन मालिकों को चालान, कानूनी नोटिस, दुर्घटना संबंधी सहायता और अनुपालन आवश्यकताओं को कानूनी विशेषज्ञों के टेक्नोलॉजी-संचालित नेटवर्क के माध्यम से प्रबंधित करने में मदद करता है।',
+    },
   },
   {
-    q: { en: 'Who is this plan for?', hi: 'यह प्लान किसके लिए है?' },
-    a: { en: 'Small fleet owners, commercial vehicle owners, transport operators and SMEs using vehicles for business.', hi: 'छोटे फ्लीट मालिक, कमर्शियल वाहन मालिक, ट्रांसपोर्ट ऑपरेटर और व्यापार के लिए वाहन उपयोग करने वाले SME।' },
+    q: { en: 'How long has LOTS247 been serving vehicle owners?', hi: 'LOTS247 कब से वाहन मालिकों की सेवा कर रहा है?' },
+    a: {
+      en: 'LOTS247 has supported thousands of vehicle owners and fleet operators through its legal-tech platform, helping simplify compliance and legal assistance for the mobility sector.',
+      hi: 'LOTS247 ने अपने लीगल-टेक प्लेटफ़ॉर्म के माध्यम से हज़ारों वाहन मालिकों और फ्लीट ऑपरेटरों की सहायता की है, जिससे मोबिलिटी क्षेत्र के लिए अनुपालन और कानूनी सहायता आसान हुई है।',
+    },
   },
   {
-    q: { en: 'Does UDrive work outside cities?', hi: 'क्या UDrive शहरों के बाहर भी काम करता है?' },
-    a: { en: "Yes. The network covers 98% of India's pin codes — highways, semi-urban routes and remote checkpoints included.", hi: 'जी हाँ। नेटवर्क भारत के 98% पिन कोड को कवर करता है — हाईवे, अर्ध-शहरी रूट और दूरस्थ चेकपॉइंट सहित।' },
+    q: { en: 'Why should I choose the UDrive plan?', hi: 'मुझे UDrive प्लान क्यों चुनना चाहिए?' },
+    a: {
+      en: 'UDrive combines legal expertise with digital convenience, helping commercial vehicle owners stay compliant, reduce operational disruptions, and access legal support whenever required.',
+      hi: 'UDrive कानूनी विशेषज्ञता को डिजिटल सुविधा के साथ जोड़ता है, जिससे कमर्शियल वाहन मालिक अनुपालन में रहते हैं, संचालन में रुकावटें कम होती हैं और ज़रूरत पड़ने पर कानूनी सहायता मिलती है।',
+    },
+  },
+  {
+    q: { en: 'Is LOTS247 available across India?', hi: 'क्या LOTS247 पूरे भारत में उपलब्ध है?' },
+    a: {
+      en: 'Yes, LOTS247 provides support services across multiple cities and states, helping vehicle owners manage legal and challan-related issues wherever they operate.',
+      hi: 'जी हाँ, LOTS247 कई शहरों और राज्यों में सहायता सेवाएँ प्रदान करता है, और वाहन मालिकों को जहाँ भी वे संचालन करते हैं, कानूनी और चालान संबंधी मामलों के प्रबंधन में मदद करता है।',
+    },
   },
   {
     q: { en: 'Is the price per vehicle?', hi: 'क्या क़ीमत प्रति वाहन है?' },
@@ -1724,7 +1740,7 @@ function Faq() {
   const t = useT()
   const [open, setOpen] = useState<number>(0)
   return (
-    <section id="faq" className="bg-white py-24 lg:py-32 border-y border-stone-200/70">
+    <section id="faq" className="bg-white py-14 lg:py-32 border-y border-stone-200/70">
       <div className="mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
         <div className="text-center">
           <SectionKicker label="FAQ" />
@@ -1875,14 +1891,20 @@ function Footer() {
         <div className="mt-16 border-t border-stone-800 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="font-mono-label text-[10px] text-stone-500 order-2 sm:order-1">{t('© 2026 LOTS247. All rights reserved.', '© 2026 LOTS247. सर्वाधिकार सुरक्षित।')}</p>
           <div className="flex items-center gap-2.5 order-1 sm:order-2">
-            <a href="#" aria-label="LinkedIn" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 hover:text-emerald-400 hover:border-emerald-500/40 transition-colors">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.37 4.28 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
-            </a>
-            <a href="#" aria-label="Instagram" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 hover:text-emerald-400 hover:border-emerald-500/40 transition-colors">
+            <a href="https://www.instagram.com/lots_247/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 hover:text-emerald-400 hover:border-emerald-500/40 transition-colors">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className="w-4 h-4"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" /></svg>
             </a>
-            <a href="#" aria-label="YouTube" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 hover:text-emerald-400 hover:border-emerald-500/40 transition-colors">
+            <a href="https://www.facebook.com/people/Lots247/61582100346946/" target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 hover:text-emerald-400 hover:border-emerald-500/40 transition-colors">
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M22.675 0H1.325C.593 0 0 .593 0 1.325v21.351C0 23.408.593 24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 1.894-4.788 4.66-4.788 1.325 0 2.464.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12V24h6.116C23.407 24 24 23.408 24 22.676V1.325C24 .593 23.407 0 22.675 0z"/></svg>
+            </a>
+            <a href="https://youtube.com/@lots24x7?si=m4gh4I7RnazBCTRP" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 hover:text-emerald-400 hover:border-emerald-500/40 transition-colors">
               <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1c.5-1.9.5-5.8.5-5.8s0-3.9-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg>
+            </a>
+            <a href="https://x.com/LOTS24X7/status/2059642722944954742?s=20" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 hover:text-emerald-400 hover:border-emerald-500/40 transition-colors">
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-3.5 h-3.5"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>
+            </a>
+            <a href="https://www.linkedin.com/company/lots24x7/posts/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-stone-900 border border-stone-800 text-stone-300 hover:text-emerald-400 hover:border-emerald-500/40 transition-colors">
+              <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.38-1.85 3.61 0 4.28 2.37 4.28 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
             </a>
           </div>
         </div>

@@ -1,7 +1,10 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react'
 
 // LOTS247 / UDrive — Landing page implemented from Figma node 443:10198.
 // Self-contained: single file, Tailwind v4, DM Sans (via index.css).
+
+const ONBOARDING_REDIRECT =
+  'https://lots-247-design.vercel.app/sections/onboarding-and-activation/screen-designs/OnboardingFlow/fullscreen'
 
 type Lang = 'English' | 'Hindi'
 type LangCtx = { lang: Lang; setLang: (l: Lang) => void }
@@ -12,25 +15,41 @@ function useT() {
   return (en: string, hi: string) => (lang === 'Hindi' ? hi : en)
 }
 
+type DashboardModalCtx = { open: (opts?: { initialPhone?: string }) => void }
+const DashboardModalContext = createContext<DashboardModalCtx>({ open: () => {} })
+function useOpenDashboardModal() { return useContext(DashboardModalContext).open }
+
 export function UDrivePage() {
   const [lang, setLang] = useState<Lang>('English')
+  const [modalOpen, setModalOpen] = useState(false)
+  const [initialPhone, setInitialPhone] = useState('')
+
+  const openModal = useCallback((opts?: { initialPhone?: string }) => {
+    setInitialPhone((opts?.initialPhone ?? '').replace(/\D/g, '').slice(0, 10))
+    setModalOpen(true)
+  }, [])
+  const closeModal = useCallback(() => setModalOpen(false), [])
+
   return (
     <LangContext.Provider value={{ lang, setLang }}>
-      <div className="bg-white text-stone-900 font-sans antialiased">
-        <Header />
-        <Hero />
-        <Stats />
-        <Clientele />
-        <RoadReality />
-        <HowItWorks />
-        <WhatYouGet />
-        <DashboardPreview />
-        <Pricing />
-        <UseCases />
-        <Testimonials />
-        <Faq />
-        <Footer />
-      </div>
+      <DashboardModalContext.Provider value={{ open: openModal }}>
+        <div className="bg-white text-stone-900 font-sans antialiased">
+          <Header />
+          <Hero />
+          <Stats />
+          <Clientele />
+          <RoadReality />
+          <HowItWorks />
+          <WhatYouGet />
+          <DashboardPreview />
+          <Pricing />
+          <UseCases />
+          <Testimonials />
+          <Faq />
+          <Footer />
+        </div>
+        <DashboardModal open={modalOpen} onClose={closeModal} initialPhone={initialPhone} />
+      </DashboardModalContext.Provider>
     </LangContext.Provider>
   )
 }
@@ -60,8 +79,14 @@ function Wordmark({ tone = 'dark', variant = 'mark' }: { tone?: 'dark' | 'light'
 }
 
 function CtaButton({
-  children, className = '', variant = 'solid',
-}: { children: React.ReactNode; className?: string; variant?: 'solid' | 'invert' | 'outline' }) {
+  children, className = '', variant = 'solid', onClick, type = 'button',
+}: {
+  children: React.ReactNode
+  className?: string
+  variant?: 'solid' | 'invert' | 'outline'
+  onClick?: () => void
+  type?: 'button' | 'submit'
+}) {
   const styles =
     variant === 'solid'
       ? 'bg-emerald-500 text-white hover:bg-emerald-600'
@@ -69,7 +94,7 @@ function CtaButton({
         ? 'bg-white text-stone-950 hover:bg-stone-100'
         : 'border border-stone-700 text-white hover:border-stone-500'
   return (
-    <button className={`relative inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-medium transition-colors ${styles} ${className}`}>
+    <button type={type} onClick={onClick} className={`relative inline-flex items-center justify-center gap-2 rounded-full px-5 py-2.5 text-[13px] font-medium transition-colors ${styles} ${className}`}>
       {children}
     </button>
   )
@@ -108,9 +133,9 @@ function DisplayHeading({
   className?: string
 }) {
   const sizeCls = {
-    md: 'text-[1.875rem] sm:text-[2.25rem] lg:text-[2.625rem]',
-    lg: 'text-[2.25rem] sm:text-[2.75rem] lg:text-[3.5rem]',
-    xl: 'text-[2.75rem] sm:text-[3.5rem] lg:text-[4.25rem]',
+    md: 'text-[1.5rem] sm:text-[1.875rem] lg:text-[2.25rem]',
+    lg: 'text-[1.75rem] sm:text-[2.125rem] lg:text-[2.75rem] xl:text-[3.125rem]',
+    xl: 'text-[2.25rem] sm:text-[2.75rem] lg:text-[3.5rem]',
   }[size]
   const color = surface === 'dark' ? 'text-white' : 'text-stone-900'
   return (
@@ -129,6 +154,155 @@ function DisplayHeading({
   )
 }
 
+/* ─────────────────────────── 00 DASHBOARD MODAL ─────────────────────────── */
+
+function DashboardModal({
+  open, onClose, initialPhone,
+}: { open: boolean; onClose: () => void; initialPhone: string }) {
+  const t = useT()
+  const [phone, setPhone] = useState(initialPhone)
+  const [touched, setTouched] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  // Reset state every time the modal opens
+  useEffect(() => {
+    if (!open) return
+    setPhone(initialPhone)
+    setTouched(false)
+    setSubmitting(false)
+  }, [open, initialPhone])
+
+  // Body scroll lock + Escape to close + autofocus input
+  useEffect(() => {
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    window.addEventListener('keydown', onKey)
+    const focusId = window.setTimeout(() => inputRef.current?.focus(), 60)
+    return () => {
+      document.body.style.overflow = prev
+      window.removeEventListener('keydown', onKey)
+      window.clearTimeout(focusId)
+    }
+  }, [open, onClose])
+
+  if (!open) return null
+
+  const valid = /^\d{10}$/.test(phone)
+  const showError = touched && !valid
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    setTouched(true)
+    if (!valid || submitting) {
+      inputRef.current?.focus()
+      return
+    }
+    setSubmitting(true)
+    window.location.href = ONBOARDING_REDIRECT
+  }
+
+  return (
+    <div role="dialog" aria-modal="true" aria-labelledby="dashboard-modal-title" className="fixed inset-0 z-[100] flex items-center justify-center px-4 py-8 animate-fade-in" style={{ animationDuration: '120ms' }}>
+      {/* backdrop */}
+      <button
+        type="button"
+        aria-label={t('Close', 'बंद करें')}
+        onClick={onClose}
+        className="absolute inset-0 bg-stone-950/55 backdrop-blur-sm cursor-default"
+      />
+
+      {/* card */}
+      <div className="relative w-full max-w-[460px] rounded-3xl bg-white shadow-[0_30px_80px_-20px_rgba(0,0,0,0.45)] animate-fade-up overflow-hidden" style={{ animationDuration: '160ms' }}>
+        {/* close button */}
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label={t('Close', 'बंद करें')}
+          className="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-full text-stone-500 hover:bg-stone-100 hover:text-stone-900 transition-colors"
+        >
+          <svg viewBox="0 0 24 24" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round">
+            <line x1="6" y1="6" x2="18" y2="18" />
+            <line x1="18" y1="6" x2="6" y2="18" />
+          </svg>
+        </button>
+
+        <div className="px-7 pt-8 pb-7 sm:px-9 sm:pt-10 sm:pb-9">
+          <h2
+            id="dashboard-modal-title"
+            className="font-serif-display text-[1.75rem] sm:text-[2rem] font-medium leading-[1.05] tracking-[-0.02em] text-stone-900"
+            style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
+          >
+            {t('Enter mobile number', 'मोबाइल नंबर दर्ज करें')}
+          </h2>
+
+          <form onSubmit={onSubmit} className="mt-7">
+            <label htmlFor="dashboard-phone" className="sr-only">{t('Mobile number', 'मोबाइल नंबर')}</label>
+            <div className="relative">
+              <div className="absolute left-5 top-1/2 -translate-y-1/2 flex items-center gap-2.5 pointer-events-none">
+                <span className="font-mono text-[13px] font-semibold text-stone-600">+91</span>
+                <span className="h-4 w-px bg-stone-300" />
+              </div>
+              <input
+                ref={inputRef}
+                id="dashboard-phone"
+                inputMode="numeric"
+                autoComplete="tel-national"
+                maxLength={10}
+                value={phone}
+                onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                onBlur={() => setTouched(true)}
+                placeholder={t('Enter your mobile number', 'अपना मोबाइल नंबर दर्ज करें')}
+                aria-invalid={showError || undefined}
+                aria-describedby={showError ? 'dashboard-phone-error' : undefined}
+                className={[
+                  'w-full rounded-2xl border bg-white pl-[74px] pr-4 py-[18px] text-[15px] placeholder:text-stone-400 focus:outline-none focus:ring-2 transition-shadow shadow-[0_1px_0_rgba(0,0,0,0.02)]',
+                  showError ? 'border-red-400 focus:ring-red-300 focus:border-transparent' : 'border-stone-300 focus:ring-emerald-500 focus:border-transparent',
+                ].join(' ')}
+              />
+            </div>
+            {showError && (
+              <p id="dashboard-phone-error" className="mt-2 text-[12px] text-red-600">
+                {t('Please enter a valid 10-digit mobile number.', 'कृपया 10 अंकों का सही मोबाइल नंबर दर्ज करें।')}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="mt-4 group relative w-full inline-flex items-center justify-center rounded-2xl bg-stone-900 px-8 py-[18px] text-[15px] font-semibold text-white hover:bg-stone-800 transition-colors shadow-[0_8px_24px_-12px_rgba(0,0,0,0.35)] disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              <span>{submitting ? t('Setting up…', 'तैयार किया जा रहा है…') : t('Continue', 'जारी रखें')}</span>
+              <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-white transition-transform group-hover:translate-x-0.5">
+                <ArrowRight className="w-4 h-4" />
+              </span>
+            </button>
+          </form>
+
+          <p className="mt-5 text-center font-mono-label text-[9.5px] text-stone-500">
+            {t('By continuing, you agree to our ', 'जारी रखने पर आप हमारी ')}
+            <a
+              href="/terms"
+              onClick={(e) => {
+                e.preventDefault()
+                onClose()
+                window.history.pushState({}, '', '/terms')
+                window.dispatchEvent(new PopStateEvent('popstate'))
+              }}
+              className="text-emerald-600 hover:text-emerald-700 underline underline-offset-2 transition-colors"
+            >
+              {t('Terms & Conditions', 'नियम व शर्तों')}
+            </a>
+            {t('', ' से सहमत होते हैं')}
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /* ─────────────────────────── 01 HEADER ─────────────────────────── */
 
 const NAV_ITEMS: { href: string; label: { en: string; hi: string } }[] = [
@@ -142,6 +316,7 @@ function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
   const { lang, setLang } = useLang()
   const t = useT()
+  const openModal = useOpenDashboardModal()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12)
@@ -192,7 +367,7 @@ function Header() {
           {/* Desktop right cluster */}
           <div className="hidden md:flex items-center gap-2.5">
             <LangSwitch value={lang} onChange={setLang} />
-            <button className="group inline-flex items-center gap-2 rounded-full bg-stone-900 hover:bg-stone-800 transition-colors px-4 py-2 text-[13px] font-semibold text-white">
+            <button type="button" onClick={() => openModal()} className="group inline-flex items-center gap-2 rounded-full bg-stone-900 hover:bg-stone-800 transition-colors px-4 py-2 text-[13px] font-semibold text-white">
               <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
               <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 transition-transform group-hover:translate-x-0.5">
                 <ArrowRight className="w-3 h-3 text-white" />
@@ -238,6 +413,7 @@ function MobileDrawer({
   onLangChange: (l: 'English' | 'Hindi') => void
 }) {
   const t = useT()
+  const openModal = useOpenDashboardModal()
   return (
     <div
       className={[
@@ -355,7 +531,7 @@ function MobileDrawer({
         <div className="px-5 py-4 border-t border-stone-200/70 bg-[var(--color-cream)] shrink-0">
           <button
             type="button"
-            onClick={onClose}
+            onClick={() => { onClose(); openModal() }}
             className="group relative w-full inline-flex items-center justify-center rounded-2xl bg-stone-900 px-6 py-[16px] text-[15px] font-semibold text-white hover:bg-stone-800 transition-colors shadow-[0_8px_24px_-12px_rgba(0,0,0,0.35)]"
           >
             <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
@@ -413,6 +589,8 @@ function LangSwitch({
 
 function Hero() {
   const t = useT()
+  const openModal = useOpenDashboardModal()
+  const [heroPhone, setHeroPhone] = useState('')
   return (
     <section className="relative isolate overflow-hidden bg-[var(--color-cream)] pt-[72px]">
       {/* Hairline grid — operational dispatch feel */}
@@ -448,7 +626,11 @@ function Hero() {
               )}
             </p>
 
-            <div className="animate-fade-up mt-8 max-w-[460px]" style={{ animationDelay: '220ms' }}>
+            <form
+              onSubmit={(e) => { e.preventDefault(); openModal({ initialPhone: heroPhone }) }}
+              className="animate-fade-up mt-8 max-w-[460px]"
+              style={{ animationDelay: '220ms' }}
+            >
               <div className="relative">
                 <div className="absolute left-5 top-1/2 -translate-y-1/2 flex items-center gap-2.5 pointer-events-none">
                   <span className="font-mono text-[13px] font-semibold text-stone-600">+91</span>
@@ -457,18 +639,20 @@ function Hero() {
                 <input
                   inputMode="numeric"
                   maxLength={10}
+                  value={heroPhone}
+                  onChange={(e) => setHeroPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                   placeholder={t('Enter your mobile number', 'अपना मोबाइल नंबर दर्ज करें')}
                   aria-label={t('Mobile number', 'मोबाइल नंबर')}
                   className="w-full rounded-2xl border border-stone-300 bg-white pl-[74px] pr-4 py-[18px] text-[15px] placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-shadow shadow-[0_1px_0_rgba(0,0,0,0.02)]"
                 />
               </div>
-              <button className="mt-3 group relative w-full inline-flex items-center justify-center rounded-2xl bg-stone-900 px-8 py-[18px] text-[15px] font-semibold text-white hover:bg-stone-800 transition-colors shadow-[0_8px_24px_-12px_rgba(0,0,0,0.35)]">
+              <button type="submit" className="mt-3 group relative w-full inline-flex items-center justify-center rounded-2xl bg-stone-900 px-8 py-[18px] text-[15px] font-semibold text-white hover:bg-stone-800 transition-colors shadow-[0_8px_24px_-12px_rgba(0,0,0,0.35)]">
                 <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
                 <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-white transition-transform group-hover:translate-x-0.5">
                   <ArrowRight className="w-4 h-4" />
                 </span>
               </button>
-            </div>
+            </form>
           </div>
 
           {/* Right illustration */}
@@ -491,10 +675,10 @@ function Hero() {
 /* ─────────────────────────── 03 STATS ─────────────────────────── */
 
 const STATS: { v: string; l: { en: string; hi: string } }[] = [
-  { v: '75,000+', l: { en: 'lawyers', hi: 'वकील' } },
+  { v: '80,000+', l: { en: 'lawyers', hi: 'वकील' } },
   { v: '98%', l: { en: 'pin codes', hi: 'पिन कोड' } },
-  { v: '24×7', l: { en: 'on call', hi: 'ऑन-कॉल' } },
-  { v: '2 hr', l: { en: 'on ground', hi: 'मौके पर' } },
+  { v: '24×7', l: { en: 'Legal Support', hi: 'कानूनी सहायता' } },
+  { v: '75 Crore+', l: { en: 'Savings on Legal Fees', hi: 'कानूनी शुल्क में बचत' } },
 ]
 
 function Stats() {
@@ -514,14 +698,18 @@ function Stats() {
               ].join(' ')}
             >
               <div
-                className="font-serif-display font-medium text-emerald-700 num-tabular
-                           text-[2rem] sm:text-[2.5rem] lg:text-[3.25rem]
-                           leading-[1] tracking-[-0.02em]"
+                className="font-serif-display font-semibold text-emerald-700 num-tabular
+                           text-[1.625rem] sm:text-[2rem] lg:text-[2.5rem]
+                           leading-[1] tracking-[-0.02em] min-h-[1.35em] flex items-center"
                 style={{ fontVariationSettings: '"opsz" 120, "SOFT" 25' }}
               >
-                {s.v}
+                {s.v.split('×').flatMap((part, idx, arr) =>
+                  idx < arr.length - 1
+                    ? [<span key={`p${idx}`}>{part}</span>, <span key={`x${idx}`} className="inline-block text-[1.35em] font-medium align-[-0.06em] mx-[0.02em]">×</span>]
+                    : [<span key={`p${idx}`}>{part}</span>]
+                )}
               </div>
-              <div className="mt-4 font-mono-label text-[14px] sm:text-[16px] text-stone-500">
+              <div className="mt-1.5 font-mono-label text-[12px] sm:text-[13px] lg:text-[14px] text-stone-500 whitespace-nowrap">
                 {t(s.l.en, s.l.hi)}
               </div>
             </div>
@@ -589,16 +777,16 @@ function Clientele() {
 type LocalizedCard = { img: string; alt: string; title: { en: string; hi: string }; body: { en: string; hi: string } }
 const ROAD_REALITY_CARDS: LocalizedCard[] = [
   {
-    img: '/issue-police.png',
-    alt: 'Driver speaking with a police officer at a checkpoint',
-    title: { en: 'Police Checking', hi: 'पुलिस जाँच' },
-    body: { en: 'Vehicle stopped, papers questioned, driver unsure what to say next.', hi: 'वाहन रोका गया, कागज़ात पर सवाल, ड्राइवर को समझ नहीं आ रहा क्या कहे।' },
-  },
-  {
     img: '/issue-challan.png',
     alt: 'Driver overwhelmed by pending challan papers',
     title: { en: 'Challan Pressure', hi: 'चालान का दबाव' },
     body: { en: 'Pending challans piling up. Renewals and permits getting blocked.', hi: 'पेंडिंग चालान बढ़ते जा रहे हैं। रिन्यूअल और परमिट अटक रहे हैं।' },
+  },
+  {
+    img: '/issue-police.png',
+    alt: 'Driver speaking with a police officer at a checkpoint',
+    title: { en: 'Police Checking', hi: 'पुलिस जाँच' },
+    body: { en: 'Vehicle stopped, papers questioned, driver unsure what to say next.', hi: 'वाहन रोका गया, कागज़ात पर सवाल, ड्राइवर को समझ नहीं आ रहा क्या कहे।' },
   },
   {
     img: '/issue-business-delay.png',
@@ -662,6 +850,7 @@ const WHAT_YOU_GET_SMALL: { title: { en: string; hi: string }; body: { en: strin
 
 function WhatYouGet() {
   const t = useT()
+  const openModal = useOpenDashboardModal()
   return (
     <section id="features" className="bg-[var(--color-cream)] py-24 lg:py-32">
       <div className="mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
@@ -693,7 +882,7 @@ function WhatYouGet() {
                 WebkitMaskComposite: 'source-in',
               }}
             />
-            <div className="relative z-10 p-10 sm:p-12">
+            <div className="relative z-10 pt-6 pr-10 pb-10 pl-7 sm:pt-7 sm:pr-12 sm:pb-12 sm:pl-8">
               <div className="inline-flex items-center gap-2.5">
                 <span className="relative flex h-2 w-2" aria-hidden="true">
                   <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-60 animate-ping" />
@@ -701,7 +890,7 @@ function WhatYouGet() {
                 </span>
                 <span className="font-mono-label text-[10.5px] text-emerald-600">{t('Included', 'शामिल')}</span>
               </div>
-              <h3 className="mt-8 font-serif-display text-[2rem] sm:text-[2.5rem] lg:text-[3rem] font-medium leading-[1.02] tracking-[-0.02em] text-stone-900">
+              <h3 className="mt-6 font-serif-display text-[2rem] sm:text-[2.5rem] lg:text-[3rem] font-medium leading-[1.02] tracking-[-0.02em] text-stone-900">
                 {t('24×7 On-Call Legal Support', '24×7 ऑन-कॉल कानूनी सहायता')}
               </h3>
               <p className="mt-6 text-[14px] sm:text-[15px] leading-[1.65] text-stone-600 max-w-[360px]">
@@ -729,7 +918,7 @@ function WhatYouGet() {
         </div>
 
         <div className="mt-16 flex justify-center">
-          <button className="group relative inline-flex items-center gap-3 rounded-full bg-stone-900 hover:bg-stone-800 transition-colors px-8 py-4 text-[14px] font-semibold text-white">
+          <button type="button" onClick={() => openModal()} className="group relative inline-flex items-center gap-3 rounded-full bg-stone-900 hover:bg-stone-800 transition-colors px-8 py-4 text-[14px] font-semibold text-white">
             <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
             <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 transition-transform group-hover:translate-x-0.5">
               <ArrowRight className="w-3.5 h-3.5" />
@@ -744,10 +933,10 @@ function WhatYouGet() {
 /* ─────────────────────────── 06 HOW IT WORKS ─────────────────────────── */
 
 const HOW_IT_WORKS_STEPS: { title: { en: string; hi: string }; body: { en: string; hi: string } }[] = [
-  { title: { en: 'Enter vehicle details', hi: 'वाहन का विवरण दर्ज करें' }, body: { en: 'Add your vehicle number and mobile number above the fold.', hi: 'ऊपर अपना वाहन नंबर और मोबाइल नंबर डालें।' } },
-  { title: { en: 'Verify with OTP', hi: 'OTP से सत्यापित करें' }, body: { en: 'Quick mobile OTP — no documents required upfront.', hi: 'त्वरित मोबाइल OTP — शुरुआत में कोई दस्तावेज़ नहीं चाहिए।' } },
-  { title: { en: 'Create your dashboard', hi: 'अपना डैशबोर्ड बनाएँ' }, body: { en: 'Your vehicle is registered and the dashboard is ready to use.', hi: 'आपका वाहन पंजीकृत हो जाता है और डैशबोर्ड उपयोग के लिए तैयार है।' } },
-  { title: { en: 'Activate UDrive', hi: 'UDrive सक्रिय करें' }, body: { en: 'Unlock 24×7 legal support, challan assistance and wallet credits.', hi: '24×7 कानूनी सहायता, चालान सहायता और वॉलेट क्रेडिट अनलॉक करें।' } },
+  { title: { en: 'Enter mobile number', hi: 'मोबाइल नंबर दर्ज करें' }, body: { en: 'Add your mobile number to get started — no documents needed.', hi: 'शुरू करने के लिए अपना मोबाइल नंबर डालें — कोई दस्तावेज़ नहीं चाहिए।' } },
+  { title: { en: 'Verify OTP', hi: 'OTP सत्यापित करें' }, body: { en: 'Quick mobile OTP confirms your number in seconds.', hi: 'त्वरित मोबाइल OTP आपके नंबर की पुष्टि सेकंडों में करता है।' } },
+  { title: { en: 'Choose your plan', hi: 'अपना प्लान चुनें' }, body: { en: 'Pick the plan that fits your vehicle and business needs.', hi: 'अपने वाहन और व्यापार के लिए सही प्लान चुनें।' } },
+  { title: { en: 'Create your dashboard', hi: 'अपना डैशबोर्ड बनाएँ' }, body: { en: 'Unlock 24×7 legal support, challan assistance and wallet credits.', hi: '24×7 कानूनी सहायता, चालान सहायता और वॉलेट क्रेडिट अनलॉक करें।' } },
 ]
 const HOW_IT_WORKS_TOTAL = HOW_IT_WORKS_STEPS.length
 
@@ -972,8 +1161,8 @@ function HowItWorks() {
   )
 }
 
-const HOW_PHONE_SOURCES = ['/device-step-1.png', '/device-step-2.png', '/device-step-3.png', '/device-step-3.png']
-const HOW_PHONE_ALTS = ['Enter vehicle details', 'Verify with OTP', 'Dashboard ready', 'UDrive activated']
+const HOW_PHONE_SOURCES = ['/device-step-1.png', '/device-step-otp.png', '/device-step-2.png', '/device-step-3.png']
+const HOW_PHONE_ALTS = ['Enter mobile number', 'Verify OTP', 'Choose your plan', 'Dashboard ready']
 
 function HowPhoneScreen({ step }: { step: number }) {
   const idx = Math.min(step, HOW_PHONE_SOURCES.length - 1)
@@ -1006,6 +1195,7 @@ const LOCKED_FEATURES: { en: string; hi: string }[] = [
 ]
 
 function DashboardPreview() {
+  const openModal = useOpenDashboardModal()
   const t = useT()
   return (
     <section className="relative bg-[var(--color-ink)] text-white py-24 lg:py-32 overflow-hidden">
@@ -1065,7 +1255,7 @@ function DashboardPreview() {
                   key={f.en}
                   className="flex items-center justify-between gap-3 rounded-xl bg-white/[0.04] border border-white/10 px-4 py-3"
                 >
-                  <span className="text-[13px] text-stone-200 truncate">{t(f.en, f.hi)}</span>
+                  <span className="text-[14px] font-medium text-stone-200 truncate">{t(f.en, f.hi)}</span>
                   <span className="inline-flex items-center gap-1 text-[9.5px] font-bold text-amber-400 uppercase tracking-[0.12em] flex-shrink-0">
                     <LockIcon className="w-3 h-3" />
                     {t('Locked', 'लॉक')}
@@ -1074,7 +1264,7 @@ function DashboardPreview() {
               ))}
             </ul>
 
-            <button className="group relative mt-5 w-full inline-flex items-center justify-center rounded-2xl bg-emerald-500 px-6 py-[16px] text-[14px] font-semibold text-white hover:bg-emerald-600 transition-colors shadow-[0_8px_24px_-12px_rgba(0,184,118,0.55)]">
+            <button type="button" onClick={() => openModal()} className="group relative mt-5 w-full inline-flex items-center justify-center rounded-2xl bg-emerald-500 px-6 py-[16px] text-[14px] font-semibold text-white hover:bg-emerald-600 transition-colors shadow-[0_8px_24px_-12px_rgba(0,184,118,0.55)]">
               <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
               <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-stone-950/25 transition-transform group-hover:translate-x-0.5">
                 <ArrowRight className="w-4 h-4 text-white" />
@@ -1112,7 +1302,7 @@ function DashboardPreview() {
                   {LOCKED_FEATURES.map((f) => (
                     <div
                       key={f.en}
-                      className="flex items-center justify-between gap-3 rounded-xl bg-white/85 border border-stone-200 px-4 py-2.5 text-[13px] text-stone-800 shadow-sm"
+                      className="flex items-center justify-between gap-3 rounded-xl bg-white/85 border border-stone-200 px-4 py-2.5 text-[14px] font-medium text-stone-800 shadow-sm"
                     >
                       <span className="truncate">{t(f.en, f.hi)}</span>
                       <span className="inline-flex items-center gap-1 text-[9px] font-bold text-amber-600 uppercase tracking-[0.12em] flex-shrink-0">
@@ -1123,7 +1313,7 @@ function DashboardPreview() {
                   ))}
                 </div>
 
-                <button className="mt-6 group relative w-full inline-flex items-center justify-center rounded-full bg-emerald-500 px-6 py-3.5 text-[14px] font-medium text-white hover:bg-emerald-600 transition-colors">
+                <button type="button" onClick={() => openModal()} className="mt-6 group relative w-full inline-flex items-center justify-center rounded-full bg-emerald-500 px-6 py-3.5 text-[14px] font-medium text-white hover:bg-emerald-600 transition-colors">
                   <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
                   <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/20">
                     <ArrowRight className="w-3.5 h-3.5 text-white" />
@@ -1174,6 +1364,7 @@ const PRICING_COST_ROWS: { l: { en: string; hi: string }; v: string }[] = [
 ]
 
 function Pricing() {
+  const openModal = useOpenDashboardModal()
   const t = useT()
   return (
     <section id="pricing" className="relative bg-[var(--color-cream)] py-24 lg:py-32 overflow-hidden">
@@ -1220,7 +1411,7 @@ function Pricing() {
                 ))}
               </ul>
 
-              <button className="mt-8 group relative w-full inline-flex items-center justify-center rounded-full bg-emerald-500 px-5 py-3.5 text-[14px] font-medium text-white hover:bg-emerald-600 transition-colors">
+              <button type="button" onClick={() => openModal()} className="mt-8 group relative w-full inline-flex items-center justify-center rounded-full bg-emerald-500 px-5 py-3.5 text-[14px] font-medium text-white hover:bg-emerald-600 transition-colors">
                 <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
                 <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/20">
                   <ArrowRight className="w-3.5 h-3.5 text-white" />
@@ -1238,12 +1429,12 @@ function Pricing() {
                     className="font-serif-display text-[1.875rem] lg:text-[2.25rem] font-medium tracking-[-0.02em] leading-[1.05] text-stone-900 num-tabular"
                     style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
                   >
-                    {t('You pay ₹999,', 'आप ₹999 देते हैं,')} <span className="inline-block rounded-md bg-emerald-100 text-emerald-800 px-2 py-0.5">{t('you get ₹1,100', '₹1,100 आपको मिलते हैं')}</span> {t('wallet benefit back', 'वॉलेट बेनिफिट के रूप में')}
+                    {t('You pay 999,', 'आप 999 देते हैं,')} <span className="inline-block rounded-md bg-emerald-100 text-emerald-800 px-2 py-0.5">{t('you get 1,100', '1,100 आपको मिलते हैं')}</span> {t('wallet benefit back', 'वॉलेट बेनिफिट के रूप में')}
                   </h3>
                 </div>
                 <img
                   src="/wallet-coin.png"
-                  alt="Gold coin with truck icon — wallet recharge"
+                  alt="Gold coin — wallet recharge"
                   className="shrink-0 w-24 h-24 lg:w-28 lg:h-28 object-contain select-none pointer-events-none"
                   draggable={false}
                   loading="lazy"
@@ -1265,7 +1456,7 @@ function Pricing() {
                       <span className="inline-flex h-5 w-5 items-center justify-center rounded-full border border-red-200 bg-red-50 text-red-500">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" className="w-2.5 h-2.5"><line x1="6" y1="6" x2="18" y2="18" /><line x1="18" y1="6" x2="6" y2="18" /></svg>
                       </span>
-                      <span className="text-[13px] text-stone-700">{t(r.l.en, r.l.hi)}</span>
+                      <span className="text-[13px] font-medium text-stone-700">{t(r.l.en, r.l.hi)}</span>
                     </div>
                     <span className="text-[14px] font-semibold text-stone-400 line-through tabular-nums">{r.v}</span>
                   </li>
@@ -1314,6 +1505,7 @@ const USE_CASES: LocalizedUseCase[] = [
 
 function UseCases() {
   const t = useT()
+  const openModal = useOpenDashboardModal()
   return (
     <section className="relative bg-white py-24 lg:py-32 overflow-hidden">
       {/* faint hairline grid — operational dispatch feel */}
@@ -1392,7 +1584,7 @@ function UseCases() {
         </div>
 
         <div className="mt-10 flex justify-center">
-          <CtaButton><span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span><ArrowRight className="w-4 h-4" /></CtaButton>
+          <CtaButton onClick={() => openModal()}><span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span><ArrowRight className="w-4 h-4" /></CtaButton>
         </div>
       </div>
     </section>
@@ -1650,7 +1842,6 @@ function Footer() {
           </div>
           <div className="col-span-1 lg:col-span-3">
             <ul className="space-y-3 text-[13px] text-stone-300">
-              <li><a className="hover:text-emerald-400 transition-colors" href="#">{t('About', 'हमारे बारे में')}</a></li>
               <li>
                 <a
                   className="hover:text-emerald-400 transition-colors"

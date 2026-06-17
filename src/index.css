@@ -15,19 +15,19 @@
   --font-serif: "DM Sans", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, monospace;
 
-  /* Brand green — overrides Tailwind's emerald-500 token */
-  --color-emerald-500: #00b876;
-  /* Re-derived scale around #00b876 so neighbouring shades stay in family */
-  --color-emerald-300: #6ee7c0;
-  --color-emerald-400: #34d39a;
-  --color-emerald-600: #009660;
-  --color-emerald-700: #007a4d;
-  --color-emerald-50:  #e6fbf2;
-  --color-emerald-100: #c2f5dd;
+  /* Brand cyan — overrides Tailwind's emerald-500 token */
+  --color-emerald-500: #54c4d2;
+  /* Re-derived scale around #54c4d2 so neighbouring shades stay in family */
+  --color-emerald-300: #8fdce5;
+  --color-emerald-400: #6dcedb;
+  --color-emerald-600: #2ea3b3;
+  --color-emerald-700: #1f8492;
+  --color-emerald-50:  #eaf8fa;
+  --color-emerald-100: #cfeff3;
 
-  /* Warm cream page surface — slightly warmer than stone-50, gives editorial paper feel */
-  --color-cream: #f7f3ec;
-  --color-cream-deep: #efe9dd;
+  /* Light grey page surface — cool, neutral, lets the cyan brand pop */
+  --color-cream: #f5f5f4;
+  --color-cream-deep: #e7e5e4;
   /* Ink — a near-black with warm undertone for dark surfaces, sits better with cream than pure stone-950 */
   --color-ink: #181513;
   --color-ink-soft: #26211c;
@@ -135,8 +135,8 @@
     to   { transform: translateX(-50%); }
   }
   @keyframes soft-pulse {
-    0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.55); }
-    50%      { transform: scale(1.04); opacity: 0.95; box-shadow: 0 0 0 14px rgba(16, 185, 129, 0); }
+    0%, 100% { transform: scale(1); opacity: 1; box-shadow: 0 0 0 0 rgba(84, 196, 210, 0.55); }
+    50%      { transform: scale(1.04); opacity: 0.95; box-shadow: 0 0 0 14px rgba(84, 196, 210, 0); }
   }
   @keyframes phone-float {
     0%, 100% { transform: rotate(-2deg) translateY(0); }
@@ -161,8 +161,8 @@
     50%      { transform: scaleX(1); }
   }
   @keyframes lang-nudge {
-    0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
-    50%      { box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.25); }
+    0%, 100% { box-shadow: 0 0 0 0 rgba(84, 196, 210, 0); }
+    50%      { box-shadow: 0 0 0 6px rgba(84, 196, 210, 0.25); }
   }
   @keyframes cta-glow {
     0%, 100% { opacity: 0.55; transform: scale(1); }
@@ -183,7 +183,7 @@
   .bg-noise {
     background-image:
       radial-gradient(at 30% 20%, rgba(255,255,255,0.04) 0px, transparent 50%),
-      radial-gradient(at 80% 90%, rgba(16,185,129,0.06) 0px, transparent 50%);
+      radial-gradient(at 80% 90%, rgba(84,196,210,0.06) 0px, transparent 50%);
   }
 
   /* Hide native scrollbar — used for snap carousels on mobile */

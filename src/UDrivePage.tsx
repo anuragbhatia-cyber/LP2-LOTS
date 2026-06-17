@@ -59,21 +59,21 @@ export function UDrivePage() {
 function Wordmark({ tone = 'dark', variant = 'mark' }: { tone?: 'dark' | 'light'; variant?: 'mark' | 'full' }) {
   if (variant === 'full') {
     return (
-      <a href="#" className="inline-flex items-center -ml-3">
+      <a href="#" className="inline-flex items-center">
         <img
-          src="/lots247-logo-full-white.webp"
-          alt="LOTS247 — India's first roadside legal assistance platform, by Lawyered"
-          className="h-24 w-auto"
+          src="/udrive-logo-white.png"
+          alt="UDrive by LOTS247"
+          className="h-16 w-auto"
           loading="lazy"
           decoding="async"
         />
       </a>
     )
   }
-  const src = tone === 'light' ? '/lots247-logo-white.png' : '/lots247-logo-dark.png'
+  const src = tone === 'light' ? '/udrive-logo-white.png' : '/udrive-logo-dark.png'
   return (
     <a href="#" className="inline-flex items-center">
-      <img src={src} alt="LOTS247" className="h-9 w-auto" />
+      <img src={src} alt="UDrive by LOTS247" className="h-10 w-auto" />
     </a>
   )
 }
@@ -349,15 +349,21 @@ function Header() {
         ].join(' ')}
       >
         <div className="mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16 h-full flex items-center justify-between">
-          <Wordmark tone="dark" />
+          <Wordmark tone={scrolled ? 'dark' : 'light'} />
 
           {/* Desktop nav */}
-          <nav className="hidden md:flex items-center gap-1 text-[13px] font-medium text-stone-700">
+          <nav className={[
+            'hidden md:flex items-center gap-1 text-[13px] font-medium transition-colors',
+            scrolled ? 'text-stone-700' : 'text-stone-300',
+          ].join(' ')}>
             {NAV_ITEMS.map(n => (
               <a
                 key={n.href}
                 href={n.href}
-                className="px-4 py-2 rounded-full hover:bg-stone-900/5 hover:text-stone-900 transition-colors"
+                className={[
+                  'px-4 py-2 rounded-full transition-colors',
+                  scrolled ? 'hover:bg-stone-900/5 hover:text-stone-900' : 'hover:bg-white/10 hover:text-white',
+                ].join(' ')}
               >
                 {t(n.label.en, n.label.hi)}
               </a>
@@ -381,7 +387,10 @@ function Header() {
             onClick={() => setMenuOpen(true)}
             aria-label="Open menu"
             aria-expanded={menuOpen}
-            className="md:hidden -mr-2 inline-flex items-center justify-center w-11 h-11 rounded-full text-stone-900 hover:bg-stone-900/5 active:bg-stone-900/10 transition-colors"
+            className={[
+              'md:hidden -mr-2 inline-flex items-center justify-center w-11 h-11 rounded-full transition-colors',
+              scrolled ? 'text-stone-900 hover:bg-stone-900/5 active:bg-stone-900/10' : 'text-white hover:bg-white/10 active:bg-white/15',
+            ].join(' ')}
           >
             <svg viewBox="0 0 24 24" className="w-[22px] h-[22px]" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <line x1="4" y1="7" x2="20" y2="7" />
@@ -592,26 +601,26 @@ function Hero() {
   const openModal = useOpenDashboardModal()
   const [heroPhone, setHeroPhone] = useState('')
   return (
-    <section className="relative isolate overflow-hidden bg-[var(--color-cream)] pt-[72px]">
+    <section className="relative isolate overflow-hidden bg-[var(--color-ink)] pt-[72px]">
       {/* Hairline grid — operational dispatch feel */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.05]"
+        className="pointer-events-none absolute inset-0 opacity-[0.06]"
         style={{
           backgroundImage:
-            'linear-gradient(to right, #1c1917 1px, transparent 1px), linear-gradient(to bottom, #1c1917 1px, transparent 1px)',
+            'linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)',
           backgroundSize: '88px 88px',
           maskImage: 'radial-gradient(ellipse 80% 60% at 50% 40%, black, transparent 80%)',
           WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 40%, black, transparent 80%)',
         }}
       />
 
-      <div className="relative mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16 pt-10 lg:pt-14 pb-16 lg:pb-24">
-        <div className="grid lg:grid-cols-12 items-end gap-10 lg:gap-12">
+      <div className="relative mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16 pt-8 lg:pt-10 pb-12 lg:pb-16">
+        <div className="grid lg:grid-cols-12 items-center gap-10 lg:gap-12">
           {/* Left copy + form */}
           <div className="lg:col-span-6 max-w-[640px]">
             <h1
-              className="animate-fade-up font-serif-display font-medium text-stone-900 text-balance
+              className="animate-fade-up font-serif-display font-medium text-white text-balance
                          text-[1.75rem] sm:text-[2.125rem] lg:text-[2.75rem] xl:text-[3.125rem]
                          leading-[1.05] tracking-[-0.025em]"
               style={{ fontVariationSettings: '"opsz" 144, "SOFT" 25' }}
@@ -619,7 +628,7 @@ function Hero() {
               {t('Get Legal support for your commercial vehicle', 'अपने कमर्शियल वाहन के लिए कानूनी सहायता पाएँ')}
             </h1>
 
-            <p className="animate-fade-up mt-6 lg:mt-8 text-[15px] lg:text-[17px] leading-[1.65] text-stone-700 max-w-[520px]" style={{ animationDelay: '120ms' }}>
+            <p className="animate-fade-up mt-6 lg:mt-8 text-[15px] lg:text-[17px] leading-[1.65] text-stone-300 max-w-[520px]" style={{ animationDelay: '120ms' }}>
               {t(
                 'Get 24×7 on-call legal support, challan assistance and a vehicle-wise dashboard. Stay ready before a roadside issue becomes a business stoppage.',
                 '24×7 ऑन-कॉल कानूनी सहायता, चालान निवारण और वाहन-वार डैशबोर्ड पाएँ। सड़क पर कोई समस्या आपके व्यापार को रोके, उससे पहले तैयार रहें।'
@@ -633,8 +642,8 @@ function Hero() {
             >
               <div className="relative">
                 <div className="absolute left-5 top-1/2 -translate-y-1/2 flex items-center gap-2.5 pointer-events-none">
-                  <span className="font-mono text-[13px] font-semibold text-stone-600">+91</span>
-                  <span className="h-4 w-px bg-stone-300" />
+                  <span className="font-mono text-[13px] font-semibold text-stone-300">+91</span>
+                  <span className="h-4 w-px bg-stone-600" />
                 </div>
                 <input
                   inputMode="numeric"
@@ -643,24 +652,24 @@ function Hero() {
                   onChange={(e) => setHeroPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                   placeholder={t('Enter your mobile number', 'अपना मोबाइल नंबर दर्ज करें')}
                   aria-label={t('Mobile number', 'मोबाइल नंबर')}
-                  className="w-full rounded-2xl border border-stone-300 bg-white pl-[74px] pr-4 py-[18px] text-[15px] placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-shadow shadow-[0_1px_0_rgba(0,0,0,0.02)]"
+                  className="w-full rounded-2xl border border-stone-700 bg-white/[0.04] pl-[74px] pr-4 py-[18px] text-[15px] text-white placeholder:text-stone-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-shadow"
                 />
               </div>
-              <button type="submit" className="mt-3 group relative w-full inline-flex items-center justify-center rounded-2xl bg-stone-900 px-8 py-[18px] text-[15px] font-semibold text-white hover:bg-stone-800 transition-colors shadow-[0_8px_24px_-12px_rgba(0,0,0,0.35)]">
+              <button type="submit" className="mt-3 group relative w-full inline-flex items-center justify-center rounded-full bg-emerald-500 px-8 py-[18px] text-[15px] font-semibold text-white hover:bg-emerald-400 transition-colors shadow-[0_8px_24px_-12px_rgba(84,196,210,0.55)]">
                 <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
-                <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-white transition-transform group-hover:translate-x-0.5">
+                <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-ink)] text-white transition-transform group-hover:translate-x-0.5">
                   <ArrowRight className="w-4 h-4" />
                 </span>
               </button>
             </form>
           </div>
 
-          {/* Right illustration */}
+          {/* Right photo */}
           <div className="lg:col-span-6 relative animate-fade-up" style={{ animationDelay: '340ms' }}>
             <img
-              src="/hero-truck.png"
-              alt="Decorated commercial truck — driver on call with a lawyer"
-              className="w-full max-w-[720px] mx-auto lg:mx-0 lg:ml-auto select-none pointer-events-none mix-blend-darken"
+              src="/hero-driver.png"
+              alt="Driver on a roadside call with a lawyer"
+              className="w-full max-w-[720px] mx-auto lg:mx-0 lg:ml-auto rounded-2xl select-none pointer-events-none"
               draggable={false}
               fetchPriority="high"
               decoding="async"
@@ -774,23 +783,23 @@ function Clientele() {
 
 /* ─────────────────────────── 04 ROAD REALITY ─────────────────────────── */
 
-type LocalizedCard = { img: string; alt: string; title: { en: string; hi: string }; body: { en: string; hi: string } }
+type LocalizedCard = { img: string; alt: string; title: { en: string; hi: string }; body: { en: string; hi: string }; zoom?: number }
 const ROAD_REALITY_CARDS: LocalizedCard[] = [
   {
     img: '/issue-challan.png',
-    alt: 'Driver overwhelmed by pending challan papers',
+    alt: 'Driver receiving a challan from a police officer beside his truck at night',
     title: { en: 'Challan Pressure', hi: 'चालान का दबाव' },
     body: { en: 'Pending challans piling up. Renewals and permits getting blocked.', hi: 'पेंडिंग चालान बढ़ते जा रहे हैं। रिन्यूअल और परमिट अटक रहे हैं।' },
   },
   {
     img: '/issue-police.png',
-    alt: 'Driver speaking with a police officer at a checkpoint',
+    alt: 'Police officer checking a truck driver’s papers with a flashlight at night',
     title: { en: 'Police Checking', hi: 'पुलिस जाँच' },
     body: { en: 'Vehicle stopped, papers questioned, driver unsure what to say next.', hi: 'वाहन रोका गया, कागज़ात पर सवाल, ड्राइवर को समझ नहीं आ रहा क्या कहे।' },
   },
   {
     img: '/issue-business-delay.png',
-    alt: 'Stressed business owner facing a delayed delivery schedule',
+    alt: 'Stressed fleet owner at his desk at night, delivery status board and trucks behind him',
     title: { en: 'Business Delay', hi: 'व्यापार में देरी' },
     body: { en: 'One stuck trip cascades into missed deliveries and unhappy clients.', hi: 'एक रुकी हुई ट्रिप से डिलीवरी छूटती है और ग्राहक नाराज़ होते हैं।' },
   },
@@ -799,7 +808,7 @@ const ROAD_REALITY_CARDS: LocalizedCard[] = [
 function RoadReality() {
   const t = useT()
   return (
-    <section className="relative bg-[var(--color-cream-deep)] py-12 lg:py-28 overflow-hidden">
+    <section className="relative bg-[var(--color-cream-deep)] py-10 lg:py-20 overflow-hidden">
       {/* warning-territory dot pattern — subtle, hazard-tone */}
       <div className="absolute inset-0 bg-hazard-dots opacity-50 pointer-events-none" />
 
@@ -822,6 +831,7 @@ function RoadReality() {
                   src={c.img}
                   alt={c.alt}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  style={c.zoom ? { transform: `scale(${c.zoom})`, transformOrigin: 'center' } : undefined}
                   draggable={false}
                   loading="lazy"
                   decoding="async"
@@ -852,22 +862,28 @@ function WhatYouGet() {
   const t = useT()
   const openModal = useOpenDashboardModal()
   return (
-    <section id="features" className="bg-[var(--color-cream)] py-14 lg:py-32">
-      <div className="mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
+    <section id="features" className="relative bg-[var(--color-ink)] text-white py-10 lg:py-20 overflow-hidden">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'radial-gradient(700px 380px at 20% 20%, rgba(84,196,210,0.10), transparent 60%), radial-gradient(700px 500px at 90% 80%, rgba(255,255,255,0.04), transparent 60%)',
+        }}
+      />
+      <div className="relative mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
         <div className="max-w-[820px] mx-auto text-center">
-          <SectionKicker label="What you get" />
-          <DisplayHeading className="mt-5" size="lg">
+          <SectionKicker label="What you get" surface="dark" />
+          <DisplayHeading className="mt-5" size="lg" surface="dark">
             {t('Everything your vehicle needs to stay legally ready', 'आपके वाहन को कानूनी रूप से तैयार रखने के लिए ज़रूरी सब कुछ')}
           </DisplayHeading>
         </div>
 
         <div className="mt-16 lg:mt-20 grid grid-cols-1 lg:grid-cols-12 gap-5">
-          {/* Big "Included" feature card — ink dark for emphasis */}
-          <article className="lg:col-span-6 relative overflow-hidden rounded-[24px] bg-white text-stone-900 border border-stone-200 min-h-[300px] sm:min-h-[420px] transition-all duration-300 hover:-translate-y-0.5">
-            {/* soft emerald halo */}
-            <div className="pointer-events-none absolute -left-24 -top-24 w-[420px] h-[420px] rounded-full bg-emerald-500/15 blur-3xl" />
+          {/* Big "Included" feature card */}
+          <article className="lg:col-span-6 relative overflow-hidden rounded-[24px] bg-white/[0.04] border border-white/10 min-h-[300px] sm:min-h-[420px]">
             <img
-              src="/lawyer-on-call.png"
+              src="/lawyer-on-call-v2.png"
               alt="Lawyer at desk on a phone call with legal books and laptop"
               className="absolute bottom-0 right-0 w-[58%] max-w-[380px] select-none pointer-events-none z-0"
               draggable={false}
@@ -875,11 +891,9 @@ function WhatYouGet() {
               decoding="async"
               style={{
                 maskImage:
-                  'linear-gradient(to bottom, transparent 0%, black 28%, black 100%), linear-gradient(to right, transparent 0%, black 28%, black 100%)',
+                  'radial-gradient(ellipse 110% 110% at 70% 70%, black 55%, transparent 100%)',
                 WebkitMaskImage:
-                  'linear-gradient(to bottom, transparent 0%, black 28%, black 100%), linear-gradient(to right, transparent 0%, black 28%, black 100%)',
-                maskComposite: 'intersect',
-                WebkitMaskComposite: 'source-in',
+                  'radial-gradient(ellipse 110% 110% at 70% 70%, black 55%, transparent 100%)',
               }}
             />
             <div className="relative z-10 pt-6 pr-10 pb-10 pl-7 sm:pt-7 sm:pr-12 sm:pb-12 sm:pl-8">
@@ -888,12 +902,12 @@ function WhatYouGet() {
                   <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-60 animate-ping" />
                   <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
                 </span>
-                <span className="font-mono-label text-[10.5px] text-emerald-600">{t('Included', 'शामिल')}</span>
+                <span className="font-mono-label text-[10.5px] text-emerald-400">{t('Included', 'शामिल')}</span>
               </div>
-              <h3 className="mt-6 font-serif-display text-[1.625rem] sm:text-[2rem] lg:text-[2.375rem] font-medium leading-[1.02] tracking-[-0.02em] text-stone-900">
+              <h3 className="mt-6 font-serif-display text-[1.625rem] sm:text-[2rem] lg:text-[2.375rem] font-medium leading-[1.02] tracking-[-0.02em] text-white">
                 {t('24×7 On-Call Legal Support', '24×7 ऑन-कॉल कानूनी सहायता')}
               </h3>
-              <p className="mt-6 text-[14px] sm:text-[15px] leading-[1.65] text-stone-600 max-w-[360px]">
+              <p className="mt-6 text-[14px] sm:text-[15px] leading-[1.65] text-stone-300 max-w-[360px]">
                 {t('Talk to legal support the moment your vehicle faces a roadside issue.', 'जैसे ही आपके वाहन को सड़क पर कोई समस्या आए, तुरंत कानूनी सहायता से बात करें।')}
               </p>
             </div>
@@ -904,24 +918,24 @@ function WhatYouGet() {
             {WHAT_YOU_GET_SMALL.map((c, i) => (
               <div
                 key={i}
-                className="group relative rounded-[20px] border border-stone-300/70 bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-stone-400 hover:shadow-[0_12px_28px_-12px_rgba(0,0,0,0.10)]"
+                className="group relative rounded-[20px] border border-white/10 bg-white/[0.04] p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/20 hover:shadow-[0_12px_28px_-12px_rgba(0,0,0,0.40)]"
               >
                 <div className="flex items-center gap-2">
-                  <span className="font-mono-label text-[9.5px] text-stone-400 num-tabular">{String(i + 1).padStart(2, '0')}</span>
-                  <span aria-hidden="true" className="h-px w-6 bg-stone-300 group-hover:bg-emerald-500 transition-colors" />
+                  <span className="font-mono-label text-[9.5px] text-stone-500 num-tabular">{String(i + 1).padStart(2, '0')}</span>
+                  <span aria-hidden="true" className="h-px w-6 bg-stone-600 group-hover:bg-emerald-500 transition-colors" />
                 </div>
-                <h4 className="mt-5 font-serif-display text-[1.25rem] sm:text-[1.375rem] font-medium tracking-tight text-stone-900 leading-[1.1]">{t(c.title.en, c.title.hi)}</h4>
-                <p className="mt-2 text-[12.5px] leading-[1.6] text-stone-600">{t(c.body.en, c.body.hi)}</p>
+                <h4 className="mt-5 font-serif-display text-[1.25rem] sm:text-[1.375rem] font-medium tracking-tight text-white leading-[1.1]">{t(c.title.en, c.title.hi)}</h4>
+                <p className="mt-2 text-[12.5px] leading-[1.6] text-stone-400">{t(c.body.en, c.body.hi)}</p>
               </div>
             ))}
           </div>
         </div>
 
         <div className="mt-16 flex justify-center">
-          <button type="button" onClick={() => openModal()} className="group relative inline-flex items-center gap-3 rounded-full bg-stone-900 hover:bg-stone-800 transition-colors px-8 py-4 text-[14px] font-semibold text-white">
+          <button type="button" onClick={() => openModal()} className="group relative inline-flex items-center justify-center rounded-full bg-emerald-500 px-8 py-[18px] pr-[60px] text-[15px] font-semibold text-white hover:bg-emerald-400 transition-colors shadow-[0_8px_24px_-12px_rgba(84,196,210,0.55)]">
             <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
-            <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 transition-transform group-hover:translate-x-0.5">
-              <ArrowRight className="w-3.5 h-3.5" />
+            <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-ink)] text-white transition-transform group-hover:translate-x-0.5">
+              <ArrowRight className="w-4 h-4" />
             </span>
           </button>
         </div>
@@ -999,7 +1013,7 @@ function HowItWorks() {
   }, [])
 
   return (
-    <section className="bg-white py-12 lg:py-28 border-y border-stone-200/60">
+    <section className="bg-white py-10 lg:py-20 border-y border-stone-200/60">
       <div className="mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
         <div className="text-center max-w-[1100px] mx-auto">
           <SectionKicker label="How it works" />
@@ -1198,21 +1212,21 @@ function DashboardPreview() {
   const openModal = useOpenDashboardModal()
   const t = useT()
   return (
-    <section className="relative bg-[var(--color-ink)] text-white py-14 lg:py-32 overflow-hidden">
+    <section className="relative bg-white py-10 lg:py-20 overflow-hidden">
       {/* atmospheric depth */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'radial-gradient(700px 380px at 20% 20%, rgba(0,184,118,0.10), transparent 60%), radial-gradient(700px 500px at 90% 80%, rgba(255,255,255,0.04), transparent 60%)',
+            'radial-gradient(700px 380px at 20% 20%, rgba(84,196,210,0.08), transparent 60%), radial-gradient(700px 500px at 90% 80%, rgba(24,21,19,0.04), transparent 60%)',
         }}
       />
       <div className="relative mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
         <div className="text-center max-w-[680px] mx-auto">
-          <SectionKicker label="The dashboard" surface="dark" />
+          <SectionKicker label="The dashboard" />
           <h2
-            className="font-serif-display mt-5 font-medium text-balance text-white text-[2.25rem] sm:text-[2.75rem] lg:text-[3.5rem] leading-[1.02] tracking-[-0.02em]"
+            className="font-serif-display mt-5 font-medium text-balance text-stone-900 text-[2.25rem] sm:text-[2.75rem] lg:text-[3.5rem] leading-[1.02] tracking-[-0.02em]"
             style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
           >
             {t('Your vehicle dashboard, built for daily business movement', 'आपका वाहन डैशबोर्ड, रोज़मर्रा के व्यापार के लिए बनाया गया')}
@@ -1236,14 +1250,14 @@ function DashboardPreview() {
             />
           </div>
 
-          <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-5">
+          <div className="rounded-2xl bg-stone-50 border border-stone-200 p-5">
             <div className="flex items-center gap-3">
-              <span className="inline-flex w-11 h-11 rounded-xl bg-stone-950 border border-white/10 items-center justify-center text-white shrink-0">
+              <span className="inline-flex w-11 h-11 rounded-xl bg-stone-950 items-center justify-center text-white shrink-0">
                 <LockIcon className="w-5 h-5" />
               </span>
               <div className="min-w-0">
-                <div className="font-mono-label text-[10px] text-amber-400">{t('Locked', 'लॉक')}</div>
-                <div className="text-[15px] font-semibold text-white leading-tight">
+                <div className="font-mono-label text-[10px] text-amber-600">{t('Locked', 'लॉक')}</div>
+                <div className="text-[15px] font-semibold text-stone-900 leading-tight">
                   {t('Unlock after activation', 'सक्रिय करने के बाद अनलॉक')}
                 </div>
               </div>
@@ -1253,10 +1267,10 @@ function DashboardPreview() {
               {LOCKED_FEATURES.map((f) => (
                 <li
                   key={f.en}
-                  className="flex items-center justify-between gap-3 rounded-xl bg-white/[0.04] border border-white/10 px-4 py-3"
+                  className="flex items-center justify-between gap-3 rounded-xl bg-white border border-stone-200 px-4 py-3"
                 >
-                  <span className="text-[14px] font-medium text-stone-200 truncate">{t(f.en, f.hi)}</span>
-                  <span className="inline-flex items-center gap-1 text-[9.5px] font-bold text-amber-400 uppercase tracking-[0.12em] flex-shrink-0">
+                  <span className="text-[14px] font-medium text-stone-800 truncate">{t(f.en, f.hi)}</span>
+                  <span className="inline-flex items-center gap-1 text-[9.5px] font-bold text-amber-600 uppercase tracking-[0.12em] flex-shrink-0">
                     <LockIcon className="w-3 h-3" />
                     {t('Locked', 'लॉक')}
                   </span>
@@ -1264,10 +1278,10 @@ function DashboardPreview() {
               ))}
             </ul>
 
-            <button type="button" onClick={() => openModal()} className="group relative mt-5 w-full inline-flex items-center justify-center rounded-2xl bg-emerald-500 px-6 py-[16px] text-[14px] font-semibold text-white hover:bg-emerald-600 transition-colors shadow-[0_8px_24px_-12px_rgba(0,184,118,0.55)]">
+            <button type="button" onClick={() => openModal()} className="group relative mt-5 w-full inline-flex items-center justify-center rounded-full bg-emerald-500 px-8 py-[18px] text-[15px] font-semibold text-white hover:bg-emerald-400 transition-colors shadow-[0_8px_24px_-12px_rgba(84,196,210,0.55)]">
               <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
-              <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-stone-950/25 transition-transform group-hover:translate-x-0.5">
-                <ArrowRight className="w-4 h-4 text-white" />
+              <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-ink)] text-white transition-transform group-hover:translate-x-0.5">
+                <ArrowRight className="w-4 h-4" />
               </span>
             </button>
           </div>
@@ -1285,12 +1299,12 @@ function DashboardPreview() {
               decoding="async"
             />
 
-            <div className="absolute inset-y-0 right-0 left-[42%] backdrop-blur-[4px] bg-white/40 flex items-center justify-center pointer-events-none">
+            <div className="absolute inset-y-0 right-0 left-[42%] backdrop-blur-[6px] bg-white/55 flex items-center justify-center pointer-events-none">
               <div
                 className="absolute inset-0"
                 style={{
                   background:
-                    'linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 8%, rgba(255,255,255,0.55) 100%)',
+                    'linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.45) 8%, rgba(255,255,255,0.65) 100%)',
                 }}
               />
               <div className="relative text-center px-6 w-full max-w-md pointer-events-auto">
@@ -1302,7 +1316,7 @@ function DashboardPreview() {
                   {LOCKED_FEATURES.map((f) => (
                     <div
                       key={f.en}
-                      className="flex items-center justify-between gap-3 rounded-xl bg-white/85 border border-stone-200 px-4 py-2.5 text-[14px] font-medium text-stone-800 shadow-sm"
+                      className="flex items-center justify-between gap-3 rounded-xl bg-white border border-stone-200 px-4 py-2.5 text-[14px] font-medium text-stone-800 shadow-[0_4px_14px_-6px_rgba(0,0,0,0.18)]"
                     >
                       <span className="truncate">{t(f.en, f.hi)}</span>
                       <span className="inline-flex items-center gap-1 text-[9px] font-bold text-amber-600 uppercase tracking-[0.12em] flex-shrink-0">
@@ -1313,10 +1327,10 @@ function DashboardPreview() {
                   ))}
                 </div>
 
-                <button type="button" onClick={() => openModal()} className="mt-6 group relative w-full inline-flex items-center justify-center rounded-full bg-emerald-500 px-6 py-3.5 text-[14px] font-medium text-white hover:bg-emerald-600 transition-colors">
+                <button type="button" onClick={() => openModal()} className="mt-6 group relative w-full inline-flex items-center justify-center rounded-full bg-emerald-500 px-6 py-3.5 text-[14px] font-medium text-white hover:bg-emerald-400 transition-colors">
                   <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
-                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/20">
-                    <ArrowRight className="w-3.5 h-3.5 text-white" />
+                  <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[var(--color-ink)] text-white transition-transform group-hover:translate-x-0.5">
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </span>
                 </button>
               </div>
@@ -1367,7 +1381,7 @@ function Pricing() {
   const openModal = useOpenDashboardModal()
   const t = useT()
   return (
-    <section id="pricing" className="relative bg-[var(--color-cream)] py-14 lg:py-32 overflow-hidden">
+    <section id="pricing" className="relative bg-[var(--color-cream)] py-10 lg:py-20 overflow-hidden">
       <div className="mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
         <div className="text-center">
           <SectionKicker label="Pricing" />
@@ -1468,7 +1482,7 @@ function Pricing() {
                 <span className="text-[14px] font-bold text-stone-700 tabular-nums">₹4,500+</span>
               </div>
 
-              <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50/70 p-4">
+              <div className="mt-4 rounded-xl bg-emerald-50/70 p-4">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex items-start gap-3">
                     <span className="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-white">
@@ -1507,7 +1521,7 @@ function UseCases() {
   const t = useT()
   const openModal = useOpenDashboardModal()
   return (
-    <section className="relative bg-white py-14 lg:py-32 overflow-hidden">
+    <section className="relative bg-white py-10 lg:py-20 overflow-hidden">
       {/* faint hairline grid — operational dispatch feel */}
       <div
         aria-hidden="true"
@@ -1568,7 +1582,7 @@ function UseCases() {
               {/* resolution strip — visually distinct, white bg, emerald accent */}
               <div className="relative bg-white border-t border-stone-200/80 px-5 py-4 flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-white shadow-[0_2px_8px_-2px_rgba(16,185,129,0.55)]">
+                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-white shadow-[0_2px_8px_-2px_rgba(84,196,210,0.55)]">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" className="w-2.5 h-2.5">
                       <polyline points="4 12 10 18 20 6" />
                     </svg>
@@ -1625,7 +1639,7 @@ const MINI_TESTIS_LOOP = [...MINI_TESTIS, ...MINI_TESTIS]
 function Testimonials() {
   const t = useT()
   return (
-    <section className="bg-[var(--color-cream)] py-14 lg:py-32">
+    <section className="bg-[var(--color-cream)] py-10 lg:py-20">
       <div className="mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
         <div className="text-center">
           <SectionKicker label="Voices from the road" />
@@ -1740,7 +1754,7 @@ function Faq() {
   const t = useT()
   const [open, setOpen] = useState<number>(0)
   return (
-    <section id="faq" className="bg-white py-14 lg:py-32 border-y border-stone-200/70">
+    <section id="faq" className="bg-white py-10 lg:py-20 border-y border-stone-200/70">
       <div className="mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
         <div className="text-center">
           <SectionKicker label="FAQ" />

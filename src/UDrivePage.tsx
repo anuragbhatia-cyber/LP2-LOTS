@@ -374,7 +374,7 @@ function Header() {
           <div className="hidden md:flex items-center gap-2.5">
             <LangSwitch value={lang} onChange={setLang} />
             <button type="button" onClick={() => openModal()} className="group inline-flex items-center gap-2 rounded-full bg-stone-900 hover:bg-stone-800 transition-colors px-4 py-2 text-[13px] font-semibold text-white">
-              <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
+              <span>{t("Activate your vehicle's legal backup", 'अपनी गाड़ी का लीगल बैकअप सक्रिय करें')}</span>
               <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 transition-transform group-hover:translate-x-0.5">
                 <ArrowRight className="w-3 h-3 text-white" />
               </span>
@@ -543,7 +543,7 @@ function MobileDrawer({
             onClick={() => { onClose(); openModal() }}
             className="group relative w-full inline-flex items-center justify-center rounded-2xl bg-stone-900 px-6 py-[16px] text-[15px] font-semibold text-white hover:bg-stone-800 transition-colors shadow-[0_8px_24px_-12px_rgba(0,0,0,0.35)]"
           >
-            <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
+            <span>{t("Activate your vehicle's legal backup", 'अपनी गाड़ी का लीगल बैकअप सक्रिय करें')}</span>
             <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-500 text-white transition-transform group-hover:translate-x-0.5">
               <ArrowRight className="w-4 h-4" />
             </span>
@@ -656,7 +656,7 @@ function Hero() {
                 />
               </div>
               <button type="submit" className="mt-3 group relative w-full inline-flex items-center justify-center rounded-full bg-emerald-500 px-8 py-[18px] text-[15px] font-semibold text-white hover:bg-emerald-400 transition-colors shadow-[0_8px_24px_-12px_rgba(84,196,210,0.55)]">
-                <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
+                <span>{t("Activate your vehicle's legal backup", 'अपनी गाड़ी का लीगल बैकअप सक्रिय करें')}</span>
                 <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-ink)] text-white transition-transform group-hover:translate-x-0.5">
                   <ArrowRight className="w-4 h-4" />
                 </span>
@@ -855,7 +855,7 @@ const WHAT_YOU_GET_SMALL: { title: { en: string; hi: string }; body: { en: strin
   { title: { en: 'Vehicle Dashboard', hi: 'वाहन डैशबोर्ड' }, body: { en: 'Vehicle, driver, challan and support details — all in one place.', hi: 'वाहन, ड्राइवर, चालान और सहायता — सब एक ही जगह।' } },
   { title: { en: 'Wallet Credits', hi: 'वॉलेट क्रेडिट' }, body: { en: 'Use available credits for eligible services right from the dashboard.', hi: 'डैशबोर्ड से ही उपलब्ध क्रेडिट का उपयोग पात्र सेवाओं पर करें।' } },
   { title: { en: 'Challan Assistance', hi: 'चालान सहायता' }, body: { en: 'Check, pay, contest and close challans with guided support.', hi: 'चालान देखें, भुगतान करें, चुनौती दें और सहायता के साथ बंद करें।' } },
-  { title: { en: 'On-Ground Lawyer', hi: 'मौके पर वकील' }, body: { en: 'If physical support is needed, a lawyer is arranged on actual basis.', hi: 'मौके पर सहायता ज़रूरी हो तो वकील वास्तविक आधार पर भेजा जाता है।' } },
+  { title: { en: 'Personal Driver Insurance', hi: 'ड्राइवर का व्यक्तिगत बीमा' }, body: { en: 'Personal accident cover for your driver, issued straight from the dashboard.', hi: 'आपके ड्राइवर के लिए व्यक्तिगत दुर्घटना कवर, सीधे डैशबोर्ड से जारी।' } },
 ]
 
 function WhatYouGet() {
@@ -891,9 +891,11 @@ function WhatYouGet() {
               decoding="async"
               style={{
                 maskImage:
-                  'radial-gradient(ellipse 110% 110% at 70% 70%, black 55%, transparent 100%)',
+                  'linear-gradient(to right, transparent 0%, black 22%, black 100%), linear-gradient(to bottom, transparent 0%, black 18%, black 100%)',
                 WebkitMaskImage:
-                  'radial-gradient(ellipse 110% 110% at 70% 70%, black 55%, transparent 100%)',
+                  'linear-gradient(to right, transparent 0%, black 22%, black 100%), linear-gradient(to bottom, transparent 0%, black 18%, black 100%)',
+                maskComposite: 'intersect',
+                WebkitMaskComposite: 'source-in',
               }}
             />
             <div className="relative z-10 pt-6 pr-10 pb-10 pl-7 sm:pt-7 sm:pr-12 sm:pb-12 sm:pl-8">
@@ -933,7 +935,7 @@ function WhatYouGet() {
 
         <div className="mt-16 flex justify-center">
           <button type="button" onClick={() => openModal()} className="group relative inline-flex items-center justify-center rounded-full bg-emerald-500 px-8 py-[18px] pr-[60px] text-[15px] font-semibold text-white hover:bg-emerald-400 transition-colors shadow-[0_8px_24px_-12px_rgba(84,196,210,0.55)]">
-            <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
+            <span>{t("Activate your vehicle's legal backup", 'अपनी गाड़ी का लीगल बैकअप सक्रिय करें')}</span>
             <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-ink)] text-white transition-transform group-hover:translate-x-0.5">
               <ArrowRight className="w-4 h-4" />
             </span>
@@ -1235,7 +1237,7 @@ function DashboardPreview() {
 
         {/* MOBILE: dashboard preview visible, unlock card stacked below */}
         <div className="lg:hidden mt-12 space-y-4">
-          <div className="relative overflow-hidden rounded-2xl bg-stone-950 border border-white/10 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.5)]">
+          <div className="relative overflow-hidden rounded-2xl bg-stone-950 border-2 border-black shadow-[0_24px_60px_-20px_rgba(0,0,0,0.5)]">
             <img
               src="/dashboard-preview.png"
               alt="LOTS247 vehicle dashboard"
@@ -1279,7 +1281,7 @@ function DashboardPreview() {
             </ul>
 
             <button type="button" onClick={() => openModal()} className="group relative mt-5 w-full inline-flex items-center justify-center rounded-full bg-emerald-500 px-8 py-[18px] text-[15px] font-semibold text-white hover:bg-emerald-400 transition-colors shadow-[0_8px_24px_-12px_rgba(84,196,210,0.55)]">
-              <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
+              <span>{t("Activate your vehicle's legal backup", 'अपनी गाड़ी का लीगल बैकअप सक्रिय करें')}</span>
               <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-[var(--color-ink)] text-white transition-transform group-hover:translate-x-0.5">
                 <ArrowRight className="w-4 h-4" />
               </span>
@@ -1290,7 +1292,7 @@ function DashboardPreview() {
         {/* DESKTOP: side-by-side preview with right-side unlock overlay */}
         <div className="hidden lg:block relative mt-16">
           <div className="absolute -inset-x-5 top-10 rounded-[32px] bg-emerald-500/8" />
-          <div className="relative overflow-hidden rounded-3xl shadow-[0_24px_80px_-20px_rgba(0,0,0,0.25)] bg-stone-950 min-h-[760px]">
+          <div className="relative overflow-hidden rounded-3xl border-2 border-black shadow-[0_24px_80px_-20px_rgba(0,0,0,0.25)] bg-stone-950 min-h-[760px]">
             <img
               src="/dashboard-preview.png"
               alt="LOTS247 vehicle dashboard"
@@ -1328,7 +1330,7 @@ function DashboardPreview() {
                 </div>
 
                 <button type="button" onClick={() => openModal()} className="mt-6 group relative w-full inline-flex items-center justify-center rounded-full bg-emerald-500 px-6 py-3.5 text-[14px] font-medium text-white hover:bg-emerald-400 transition-colors">
-                  <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
+                  <span>{t("Activate your vehicle's legal backup", 'अपनी गाड़ी का लीगल बैकअप सक्रिय करें')}</span>
                   <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[var(--color-ink)] text-white transition-transform group-hover:translate-x-0.5">
                     <ArrowRight className="w-3.5 h-3.5" />
                   </span>
@@ -1426,7 +1428,7 @@ function Pricing() {
               </ul>
 
               <button type="button" onClick={() => openModal()} className="mt-8 group relative w-full inline-flex items-center justify-center rounded-full bg-emerald-500 px-5 py-3.5 text-[14px] font-medium text-white hover:bg-emerald-600 transition-colors">
-                <span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span>
+                <span>{t("Activate your vehicle's legal backup", 'अपनी गाड़ी का लीगल बैकअप सक्रिय करें')}</span>
                 <span className="absolute right-2.5 top-1/2 -translate-y-1/2 inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/20">
                   <ArrowRight className="w-3.5 h-3.5 text-white" />
                 </span>
@@ -1443,7 +1445,7 @@ function Pricing() {
                     className="font-serif-display text-[1.875rem] lg:text-[2.25rem] font-medium tracking-[-0.02em] leading-[1.05] text-stone-900 num-tabular"
                     style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
                   >
-                    {t('You pay 999,', 'आप 999 देते हैं,')} <span className="inline-block rounded-md bg-emerald-100 text-emerald-800 px-2 py-0.5">{t('you get 1,100', '1,100 आपको मिलते हैं')}</span> {t('wallet benefit back', 'वॉलेट बेनिफिट के रूप में')}
+                    {t('You pay ₹999,', 'आप ₹999 देते हैं,')} <span className="inline-block rounded-md bg-emerald-100 text-emerald-800 px-2 py-0.5">{t('you get ₹1,100', '₹1,100 आपको मिलते हैं')}</span> {t('wallet benefit back', 'वॉलेट बेनिफिट के रूप में')}
                   </h3>
                 </div>
                 <img
@@ -1509,97 +1511,77 @@ function Pricing() {
 
 /* ─────────────────────────── 09 USE CASES ─────────────────────────── */
 
-type LocalizedUseCase = { num: string; time: { en: string; hi: string }; title: { en: string; hi: string }; body: { en: string; hi: string }; outcome: { en: string; hi: string } }
+type LocalizedUseCase = { num: string; title: { en: string; hi: string }; body: { en: string; hi: string } }
 const USE_CASES: LocalizedUseCase[] = [
-  { num: '01', time: { en: '11:42 PM · Highway', hi: 'रात 11:42 · हाईवे' }, title: { en: 'Police checking on highway', hi: 'हाईवे पर पुलिस जाँच' }, body: { en: 'Quick call to a lawyer who guides the driver through the conversation.', hi: 'वकील को त्वरित कॉल जो ड्राइवर को बातचीत में मार्गदर्शन देता है।' }, outcome: { en: 'Truck moves in ~15 min', hi: 'ट्रक ~15 मिनट में आगे बढ़ता है' } },
-  { num: '02', time: { en: 'Renewal day · Office', hi: 'रिन्यूअल का दिन · ऑफ़िस' }, title: { en: 'Pending challan blocking permit', hi: 'पेंडिंग चालान से परमिट अटका' }, body: { en: 'Guided resolution — online, Lok Adalat or court — whatever fits.', hi: 'मार्गदर्शित समाधान — ऑनलाइन, लोक अदालत या न्यायालय — जो उपयुक्त हो।' }, outcome: { en: 'Permit unblocked', hi: 'परमिट खुल गया' } },
-  { num: '03', time: { en: 'Saturday · Local road', hi: 'शनिवार · स्थानीय सड़क' }, title: { en: 'Minor accident or dispute', hi: 'छोटी दुर्घटना या विवाद' }, body: { en: 'On-ground lawyer arranged when needed. Driver is not alone.', hi: 'ज़रूरत पड़ने पर मौके पर वकील। ड्राइवर अकेला नहीं है।' }, outcome: { en: 'Driver not alone', hi: 'ड्राइवर अकेला नहीं' } },
-  { num: '04', time: { en: 'Monday morning · RTO', hi: 'सोमवार सुबह · RTO' }, title: { en: 'Document confusion at RTO', hi: 'RTO पर दस्तावेज़ों की उलझन' }, body: { en: 'Support to figure out what is required and where to file it.', hi: 'क्या ज़रूरी है और कहाँ जमा करना है — इसमें सहायता।' }, outcome: { en: 'No more guesswork', hi: 'अब कोई अंदाज़ा नहीं' } },
+  { num: '01', title: { en: 'Legal Backup', hi: 'लीगल बैकअप' }, body: { en: '24×7 on-call legal guidance in Hindi/English.', hi: '24×7 हिंदी/अंग्रेज़ी में ऑन-कॉल कानूनी मार्गदर्शन।' } },
+  { num: '02', title: { en: 'Life Safety', hi: 'जीवन सुरक्षा' }, body: { en: 'PA insurance cover + claim support.', hi: 'PA बीमा कवर + क्लेम सहायता।' } },
+  { num: '03', title: { en: 'Road Support', hi: 'रोड सपोर्ट' }, body: { en: 'On-ground lawyer access when required, charged at actuals.', hi: 'ज़रूरत पड़ने पर मौके पर वकील, वास्तविक शुल्क पर।' } },
+  { num: '04', title: { en: 'Challan Help', hi: 'चालान सहायता' }, body: { en: 'Discovery, resolution and tracking support.', hi: 'चालान खोज, निपटान और ट्रैकिंग सहायता।' } },
+  { num: '05', title: { en: 'Wallet Benefit', hi: 'वॉलेट लाभ' }, body: { en: '1100 credits for convenience fees + API checks.', hi: 'कन्वीनियंस फ़ीस + API जाँच के लिए 1100 क्रेडिट।' } },
+  { num: '06', title: { en: 'Compliance Ready', hi: 'अनुपालन तैयार' }, body: { en: 'PUC, fitness, RC, insurance and renewal alerts.', hi: 'PUC, फिटनेस, RC, बीमा और रिन्यूअल अलर्ट।' } },
 ]
 
 function UseCases() {
   const t = useT()
-  const openModal = useOpenDashboardModal()
   return (
-    <section className="relative bg-white py-10 lg:py-20 overflow-hidden">
-      {/* faint hairline grid — operational dispatch feel */}
+    <section className="relative bg-[var(--color-ink)] py-10 lg:py-20 overflow-hidden">
+      {/* night road photo background */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
+        className="pointer-events-none absolute inset-0 bg-cover"
+        style={{ backgroundImage: 'url(/whats-included-bg.png)', backgroundPosition: 'center bottom' }}
+      />
+      {/* dark scrim so text reads cleanly, road still visible */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-black/35"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
         style={{
-          backgroundImage:
-            'linear-gradient(to right, #1c1917 1px, transparent 1px), linear-gradient(to bottom, #1c1917 1px, transparent 1px)',
-          backgroundSize: '64px 64px',
-          maskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black, transparent 80%)',
-          WebkitMaskImage: 'radial-gradient(ellipse 70% 60% at 50% 30%, black, transparent 80%)',
+          background:
+            'linear-gradient(to bottom, rgba(8,12,20,0.5) 0%, rgba(8,12,20,0.15) 45%, rgba(8,12,20,0.35) 100%)',
         }}
       />
 
       <div className="relative mx-auto max-w-[1280px] px-4 sm:px-8 lg:px-16">
         {/* heading */}
         <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-3 font-mono-label text-[10.5px] text-stone-500">
-            <span className="h-px w-6 bg-stone-300" />
-            {t('Real moments', 'असली पल')}
-            <span className="h-px w-6 bg-stone-300" />
+          <div className="inline-flex items-center gap-3 font-mono-label text-[10.5px] text-white/60">
+            <span className="h-px w-6 bg-white/30" />
+            {t("What's included", 'क्या-क्या मिलता है')}
+            <span className="h-px w-6 bg-white/30" />
           </div>
-          <DisplayHeading className="mt-5" size="lg">
-            {t('Built for the moments that stop your day.', 'उन पलों के लिए बना है जो आपका दिन रोक देते हैं।')}
+          <DisplayHeading className="mt-5" size="lg" surface="dark">
+            {t('What will you get in ₹999/year', '₹999/साल में आपको क्या मिलेगा')}
           </DisplayHeading>
         </div>
 
         {/* cards */}
-        <div className="mt-16 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="mt-16 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {USE_CASES.map((c, i) => (
-            <article
-              key={i}
-              className="group relative flex flex-col overflow-hidden rounded-2xl bg-stone-50 transition-all duration-300 hover:bg-stone-100/80 hover:-translate-y-0.5"
-            >
-              {/* header strip — number + time chip */}
-              <div className="px-5 pt-5 pb-3 flex items-baseline justify-between">
-                <span className="font-mono-label text-[10.5px] text-stone-400 tabular-nums">
-                  {c.num} <span className="text-stone-300">/ 04</span>
+            <article key={i} className="relative px-1 py-4">
+              <div className="flex items-center gap-3">
+                <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-[#00B977] text-white shadow-[0_2px_10px_-2px_rgba(0,185,119,0.6)]">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" className="w-3 h-3">
+                    <polyline points="4 12 10 18 20 6" />
+                  </svg>
                 </span>
-                <span className="inline-flex items-center gap-1.5 text-[10.5px] tracking-[0.04em] text-stone-500">
-                  <span className="h-1 w-1 rounded-full bg-emerald-500" />
-                  {t(c.time.en, c.time.hi)}
-                </span>
-              </div>
-
-              {/* problem zone */}
-              <div className="px-5 pb-6 flex-1">
                 <h3
-                  className="font-serif-display text-[1.25rem] sm:text-[1.3rem] font-medium leading-[1.15] tracking-[-0.01em] text-stone-900"
+                  className="font-serif-display text-[1.3rem] sm:text-[1.4rem] font-medium leading-[1.15] tracking-[-0.01em] text-white"
                   style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
                 >
                   {t(c.title.en, c.title.hi)}
                 </h3>
-                <p className="mt-3 text-[13px] leading-[1.6] text-stone-600">
-                  {t(c.body.en, c.body.hi)}
-                </p>
               </div>
-
-              {/* resolution strip — visually distinct, white bg, emerald accent */}
-              <div className="relative bg-white border-t border-stone-200/80 px-5 py-4 flex items-center justify-between">
-                <div className="flex items-center gap-2.5">
-                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 text-white shadow-[0_2px_8px_-2px_rgba(84,196,210,0.55)]">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round" className="w-2.5 h-2.5">
-                      <polyline points="4 12 10 18 20 6" />
-                    </svg>
-                  </span>
-                  <div className="flex flex-col leading-tight">
-                    <span className="font-mono-label text-[9px] text-stone-400">{t('Outcome', 'परिणाम')}</span>
-                    <span className="text-[12.5px] font-semibold text-stone-900 tracking-tight">{t(c.outcome.en, c.outcome.hi)}</span>
-                  </div>
-                </div>
-              </div>
+              <p className="mt-3 ml-9 text-[13.5px] leading-[1.6] text-white/80">
+                {t(c.body.en, c.body.hi)}
+              </p>
             </article>
           ))}
         </div>
 
-        <div className="mt-10 flex justify-center">
-          <CtaButton onClick={() => openModal()}><span>{t('Create My Dashboard', 'मेरा डैशबोर्ड बनाएँ')}</span><ArrowRight className="w-4 h-4" /></CtaButton>
-        </div>
       </div>
     </section>
   )
